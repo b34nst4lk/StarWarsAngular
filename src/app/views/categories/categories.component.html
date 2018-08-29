@@ -1,3 +1,3 @@
-<p>
-  categories works!
-</p>
+<mat-list *ngFor="let category of categories.rows">
+  <app-row label={{category.label}} url={{category.url}}></app-row>
+</mat-list>

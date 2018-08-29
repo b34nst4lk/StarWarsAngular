@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RowComponent } from '../../components/row/row.component';
+import { swapiService, Rows } from '../../swapiService';
 
 @Component({
   selector: 'app-categories',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent implements OnInit {
-
-  constructor() { }
+  categories: Rows = {rows: []};
+  constructor(private svc: swapiService) { }
 
   ngOnInit() {
+    this.svc.getCategories()
+      .then((data) => this.categories = data);
   }
 
 }
