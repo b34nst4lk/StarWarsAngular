@@ -15,7 +15,7 @@ import { CommentComponent } from './components/comment/comment.component';
 import { swapiService } from './swapiService';
 
 const appRoutes: Routes = [
-  {path: "", component: CategoriesComponent},
+  {path: "", component: DetailsComponent},
   {path: ":category", component: CategoryItemsComponent},
   {path: ":category/:id", component: DetailsComponent},
 ];

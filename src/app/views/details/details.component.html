@@ -1,3 +1,5 @@
-<p>
-  details works!
-</p>
+<mat-list *ngFor="let item of items.rows">
+  <app-row label={{item.label}} url={{item.url}}></app-row>
+</mat-list>
+
+<app-img url={{url}}></app-img>
