@@ -1,3 +1,4 @@
-<p>
-  comment works!
-</p>
+<div>
+	<textarea #commentInput value={{comment}} placeholder="Enter comment here"></textarea>
+	<button (click)="onSubmit(commentInput.value)">Save</button>
+</div>
