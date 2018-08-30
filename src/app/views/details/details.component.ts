@@ -10,14 +10,15 @@ import { swapiService, Rows } from '../../swapiService';
 
 export class DetailsComponent implements OnInit {
   items: Rows = {rows: []};
-  @Input() id: number = 1;
+  @Input() id: number = 2;
   @Input() category: string = "people";
-	
+	@Input() comment: string = "";
+
   constructor(private svc: swapiService) { }
 
   ngOnInit() {
     this.svc.getItemDetailsById(this.id,this.category)
       .then((data) => this.items = data);
   }
-
+ 
 }

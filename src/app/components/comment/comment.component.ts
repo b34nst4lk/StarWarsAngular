@@ -12,34 +12,58 @@ export class CommentComponent implements OnInit {
 @Input() id: number = 0;
 @Input() category: string = "";
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-  
   submitted = false;
   model = new Comment();
   insert_object = new Comment();
   
+  constructor() { }
+
+  ngOnInit() {
+	  
+  }
+  
   onSubmit(comment) { 
 	  this.submitted = true; 
-	  this.model = new Comment(this.sn, this.id, this.category,comment);
-	  console.log('new comment',this.model);
-
 	  addComment(this.sn,this.id,this.category,comment);  
   }
   
   function addComment(sn,id,category,comment){
-	  var db = new Dexie("comments-database");
-	  db.version(1).stores({
-		comments: "++sn, id, category, comment"
-	  });
+	    var exist = false;
+		var db = new Dexie("comments-database");
+		db.version(1).stores({
+			comments: "++sn, id, category, comment"
+		});
 	  
-	  db.open(); 
+	    db.open(); 
 		db.transaction('rw', db.comments, function () {
-			this.insert_object = {sn:sn,id:id,category:category,commentText:comment};
-			db.comments.add(this.insert_object);
-		}).catch(function(err) {
+			db.comments.where({id: id, category: category}).count().then (function(c){
+				if(c>0){
+					exist = true;
+				}
+			}).then (function(c){
+				if(!exist){
+					this.insert_object = {sn:sn++,id:id,category:category,commentText:comment};
+					db.comments.add(this.insert_object);	
+				}else{
+					var key;
+					db.comments.where({id: id, category: category}).first(item => {
+						key = item.sn;
+					}).then (function(c){
+						this.update_object = {commentText:comment};
+
+						db.comments.update(key, this.update_object).then(function (updated) {
+						  if (updated)
+							console.log ("Updated comment.");
+						  else
+							console.log ("Nothing was updated.");
+						});
+					}.bind(this));
+				}					
+			}.bind(this));
+			
+		}).then(function (result) {
+              alert ("New comment " + result);
+	    }).catch(function(err) {
 			console.error(err.stack || err);
 		});    
   }
